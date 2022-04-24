@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Demo\DemoController;
+use App\Http\Controllers\Demo\MiddlerwareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,13 @@ Route::get('/userTest/{id}/{name}', function ($id, $name) {
     return 'user/id/name:' . $id . '/' . $name;
 })->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
 
+
+//  路由组使用中间件
+Route::middleware(['before.base', 'after.base'])->group(function () {
+    Route::get('/middleware/index', [MiddlerwareController::class, 'index'])->middleware('before.special_auth');
+
+    Route::get('/middleware/detail', [MiddlerwareController::class, 'detail'])->middleware('after.special_handle');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

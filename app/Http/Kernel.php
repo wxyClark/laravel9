@@ -63,5 +63,12 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
+        //  php artisan make:middlerware MiddleWareName 创建中间后要在 $routeMiddleware 中配置映射,然后才可以在route/*.php文件中使用中间件的别名
+        'before.base' => \App\Http\Middleware\BeforeBase::class,
+        'before.special_auth' => \App\Http\Middleware\BeforeSpecialAuth::class,
+
+        'after.base' => \App\Http\Middleware\AfterBase::class,
+        'after.special_handle' => \App\Http\Middleware\AfterSpecialHandle::class,
     ];
 }
