@@ -87,6 +87,9 @@
                     <div class="ml-4 text-lg leading-7 font-semibold">
                         <a href="/health"  target="_blank" class="underline text-gray-900 dark:text-white">心跳检测</a>
                     </div>
+                    <div class="ml-4 text-lg leading-7 font-semibold">
+                        <a href="/single-action"  target="_blank" class="underline text-gray-900 dark:text-white">心跳检测</a>
+                    </div>
                 </div>
 
                 <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Demo\DemoController;
 use App\Http\Controllers\Demo\MiddlerwareController;
+use App\Http\Controllers\Demo\SingleActionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +60,9 @@ Route::middleware(['before.base', 'after.base'])->group(function () {
     Route::get('/middleware/index', [MiddlerwareController::class, 'index'])->middleware('before.special_auth');
 
     Route::get('/middleware/detail', [MiddlerwareController::class, 'detail'])->middleware('after.special_handle');
+
+    # 单action控制器路由
+    Route::get('/single-action', SingleActionController::class);
 });
 
 Route::get('/dashboard', function () {
