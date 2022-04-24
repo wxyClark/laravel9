@@ -28,6 +28,9 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
+        //  全局约束。例: /demo/{id} 大概id参数不是数值时，返回404
+        Route::pattern('id', '[0-9]+');
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')

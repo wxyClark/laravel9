@@ -22,8 +22,10 @@ Route::get('/', function () {
 
 // 心跳检测
 Route::get('/health', function () {
+    echo 'route(\'profile\') = ' . route('laravel9-health') . '<br>';
     return true;
-});
+})->name('laravel9-health');
+// 命名路由后，可通过 $url = route('profile'); 获取路由的url 用于重定向 或 条件判定
 
 // 解析到 controller action
 Route::get('/demo/index', [DemoController::class, 'index']);
