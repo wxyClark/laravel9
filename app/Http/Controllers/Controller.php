@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    /**
+     * 打印当前路由的 controller@action
+     */
+    protected function printMethod()
+    {
+        print_r('<br>' . request()->route()->getActionName() . '<br>');
+    }
 }

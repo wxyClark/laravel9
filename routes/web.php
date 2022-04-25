@@ -1,9 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Demo\DemoController;
 use App\Http\Controllers\Demo\MiddlerwareController;
 use App\Http\Controllers\Demo\SingleActionController;
+use App\Http\Controllers\Demo\ColumnController;
+use App\Http\Controllers\Demo\PhotoController;
+use App\Http\Controllers\Demo\PostController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +69,17 @@ Route::middleware(['before.base', 'after.base'])->group(function () {
     # 单action控制器路由
     Route::get('/single-action', SingleActionController::class);
 });
+
+//  生成资源类代码 php artisan make:controller Demo/PhotoController --model=Photo --resource --requests
+Route::resource('photos', PhotoController::class)->missing(function (Request $request) {
+    return Redirect::route('photos.index');
+});
+//  未定义的资源路由将重定向到404
+Route::resources([
+    'columns' => ColumnController::class,
+    'posts' => PostController::class,
+]);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
