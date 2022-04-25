@@ -70,15 +70,29 @@ Route::middleware(['before.base', 'after.base'])->group(function () {
     Route::get('/single-action', SingleActionController::class);
 });
 
-//  生成资源类代码 php artisan make:controller Demo/PhotoController --model=Photo --resource --requests
+//  生成资源类代码  --api 比 --resource 少 create() 和 edit() 两个方法
+//  php artisan make:controller Demo/PhotoController --resource --model=Photo --requests
+//  php artisan make:controller PhotoController --api
 Route::resource('photos', PhotoController::class)->missing(function (Request $request) {
     return Redirect::route('photos.index');
-});
+})->names([
+    //  命名资源路由
+    'create' => 'photos.build'
+]);
+//  命名资源路由参数  /users/{admin_user}
+/**
+ * ->parameters([
+ *    'users' => 'admin_user'
+ * ]);
+ */
+
 //  未定义的资源路由将重定向到404
 Route::resources([
     'columns' => ColumnController::class,
     'posts' => PostController::class,
 ]);
+//  TODO 嵌套资源  /photos/{photo}/comments/{comment}
+// Route::resource('photos.comments', PhotoCommentController::class);
 
 
 Route::get('/dashboard', function () {
