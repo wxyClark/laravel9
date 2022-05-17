@@ -18,6 +18,6 @@ class ColumnTest extends TestCase
     {
         $array = [];
         $a = empty($array['key']);
-        $this->assertTrue($a);
+        $this->assertTrue(!$a);
     }
 }
