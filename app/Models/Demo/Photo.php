@@ -2,21 +2,14 @@
 
 namespace App\Models\Demo;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
 /**
- * 指定目录创建Model 
+ * 指定目录创建Model
  * php artisan make:model Demo/Photo --migration
  */
-class Photo extends Model
+class Photo extends BaseModel
 {
-    use HasFactory;
-
-    //  如果需要自定义用于存储时间戳的字段的名称，可以在模型上定义 CREATED_AT 和 UPDATED_AT 常量：
-    const CREATED_AT = 'creation_date';
-    const UPDATED_AT = 'updated_date';
-
 
     /**
      * 设置当前模型使用的数据库连接名。
@@ -36,12 +29,7 @@ class Photo extends Model
     protected $table = 'photos';
 
 
-    /**
-     * 与数据表关联的主键. 不指定 primaryKey 时，默认为id
-     *
-     * @var string
-     */
-    protected $primaryKey = 'id';
+
 
     /**
      * Eloquent 默认有一个 integer 值的主键，Eloquent 会自动转换这个主键为一个 integer 类型，
@@ -52,16 +40,6 @@ class Photo extends Model
      */
     // public $incrementing = false;
 
-
-    /**
-     * 指示模型是否主动维护时间戳。
-     * 默认情况下，Eloquent 期望 created_at 和 updated_at 列存在于模型对应的数据库表中。 
-     * 创建或更新模型时，Eloquent 会自动设置这些列的值。
-     * 如果您不希望 Eloquent 自动管理这些列，您应该在模型上定义一个 $timestamps 属性，其值为 false
-     *
-     * @var bool
-     */
-    public $timestamps = false;
 
     /**
      * 模型日期字段的存储格式。
