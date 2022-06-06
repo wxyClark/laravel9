@@ -64,7 +64,7 @@ class PhotoRepository extends BaseRepository
         $list = $this->select($fields)->get();
 
         //  TODO 返回数组好还是返回集合好？
-        return $list ? $this->toArray() : [];
+        return $list ? $list->toArray() : [];
     }
 
     /**
@@ -91,5 +91,17 @@ class PhotoRepository extends BaseRepository
         }
 
         return $query;
+    }
+
+    /**
+     * @desc    ES 通用查询条件
+     * @param int $tenant_id
+     * @param array $search_params
+     * @author  wxy
+     * @ctime   2022/6/6 16:53
+     */
+    private function esCondition(int $tenant_id, array $search_params)
+    {
+
     }
 }
