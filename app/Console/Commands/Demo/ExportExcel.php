@@ -45,10 +45,9 @@ class ExportExcel extends Command
         try {
 //            $this->exportAsArray();
 
-            $data = $this->service->exportTimeBill(2022, 3, 6, 23, '—');
+            $data = $this->service->getTimeBillData(2022, 3, 6, 23, '—');
 
             Excel::store(new Export([], $data), 'excel/2022H3-timeBill.xlsx', 'public');
-
         } catch (\Exception $e) {
             $logData = ArrayHelper::makeLogData($e, $this->description);
             \Log::error(ArrayHelper::logArrayToString($logData));
@@ -59,21 +58,6 @@ class ExportExcel extends Command
         $this->info('exec = ' . $exec);
 
         return true;
-    }
-
-    private function exportAsArray()
-    {
-        $export_result = [
-            ['id' => 1, 'name' => '张三', 'age' => 18],
-            ['id' => 2, 'name' => '李四', 'age' => 20],
-            ['id' => 3, 'name' => '王五', 'age' => 22],
-        ];
-        $header = array_keys($export_result[0]);
-        array_unshift($export_result, $header);
-
-        $this->info('导出成功');
-
-        Excel::store(new Export([], $export_result), 'excel/test2.xlsx', 'public');
     }
 
 }

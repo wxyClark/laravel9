@@ -3,6 +3,8 @@
 
 namespace App\Services;
 
+use App\Helpers\DateTimeHelper;
+
 /**
  * @desc    时间账单服务
  * @author  wxy
@@ -22,11 +24,15 @@ class TimeBillService
      * @author  wxy
      * @ctime   2022/6/7 17:10
      */
-    public function exportTimeBill(int $year, int $quarter, int $wakeUpAt, int $sleepAt, string $separator = '—')
+    public function getTimeBillData(int $year, int $quarter, int $wakeUpAt, int $sleepAt, string $separator = '—')
     {
         $header = $this->getHeader($wakeUpAt, $sleepAt, $separator);
 
-        return [$header];
+        $data = $this->getBaseData($year, $quarter);
+
+        array_unshift($data, [$header]);
+
+        return $data;
     }
 
     /**
@@ -163,12 +169,43 @@ class TimeBillService
     }
 
     /**
-     * @desc    第一列(日期)
+     * @desc    前两列(星期、日期)
+     * @param int $year
+     * @param int $quarter
+     * @return array
      * @author  wxy
-     * @ctime   2022/6/7 15:30
+     * @ctime   2022/6/7 17:30
      */
-    private function getFirstColumn()
+    private function getBaseData(int $year, int $quarter)
     {
+        $endMonth = $quarter * 3 + 1;
+        $currentMonth = $endMonth - 3;
 
+        $currentDay = $year . '/'. $currentMonth . '/1';
+
+        $weekNoMap = [
+            '日',
+            '一',
+            '二',
+            '三',
+            '四',
+            '五',
+            '六',
+        ];
+
+        $data = [];
+        while ($currentMonth < $endMonth) {
+            $startWeekNo = date('w', strtotime($currentDay));
+            $data[] = [
+                $weekNoMap[$startWeekNo],//  星期
+                $currentDay//  日期
+            ];
+
+            $timestamp = strtotime($currentDay) + DateTimeHelper::ONE_DAY;
+            $currentDay = date('Y/n/d', $timestamp);
+            $currentMonth = date('n', $timestamp);
+        }
+
+        return $data;
     }
 }
