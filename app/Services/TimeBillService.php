@@ -14,23 +14,42 @@ use App\Helpers\DateTimeHelper;
 class TimeBillService
 {
     /**
-     * @desc    导出时间账单
+     * @desc    导出时间账单(前两列 —— 星期、日期)
      * @param int $year
      * @param int $quarter
-     * @param int $wakeUpAt
-     * @param int $sleepAt
-     * @param string $separator
-     * @return \string[][]
+     * @return array
      * @author  wxy
-     * @ctime   2022/6/7 17:10
+     * @ctime   2022/6/7 18:06
      */
-    public function getTimeBillData(int $year, int $quarter, int $wakeUpAt, int $sleepAt, string $separator = '—')
+    public function getTimeBillData(int $year, int $quarter)
     {
-        $header = $this->getHeader($wakeUpAt, $sleepAt, $separator);
+        $endMonth = $quarter * 3 + 1;
+        $currentMonth = $endMonth - 3;
 
-        $data = $this->getBaseData($year, $quarter);
+        $currentDay = $year . '/'. $currentMonth . '/1';
 
-        array_unshift($data, [$header]);
+        $weekNoMap = [
+            '日',
+            '一',
+            '二',
+            '三',
+            '四',
+            '五',
+            '六',
+        ];
+
+        $data = [];
+        while ($currentMonth < $endMonth) {
+            $startWeekNo = date('w', strtotime($currentDay));
+            $data[] = [
+                $weekNoMap[$startWeekNo],//  星期
+                $currentDay//  日期
+            ];
+
+            $timestamp = strtotime($currentDay) + DateTimeHelper::ONE_DAY;
+            $currentDay = date('Y/n/d', $timestamp);
+            $currentMonth = date('n', $timestamp);
+        }
 
         return $data;
     }
@@ -40,7 +59,7 @@ class TimeBillService
      * @author  wxy
      * @ctime   2022/6/7 15:30
      */
-    private function getHeader(int $wakeUpAt, int $sleepAt, $separator)
+    public function getHeader(int $wakeUpAt, int $sleepAt, $separator)
     {
         $columnsGroup = [
             //  日汇总
@@ -91,7 +110,7 @@ class TimeBillService
                 $key = chr(ord($start) + $i);
             } else {
                 //  超过26列, 从AA开始排
-                $key = chr(ord($start) + ceil($i / 26) - 1) . chr(ord($start) + ceil($i % 26));
+                $key = chr(ord($start) + floor($i / 26) - 1) . chr(ord($start) + ($i % 26));
             }
 
             $baseHeader[$key] = '';
@@ -125,7 +144,7 @@ class TimeBillService
      * @author  wxy
      * @ctime   2022/6/7 16:20
      */
-    private function getTimeIntervalByHalfHour(int $wakeUpAt, int $sleepAt, string $separator)
+    public function getTimeIntervalByHalfHour(int $wakeUpAt, int $sleepAt, string $separator)
     {
         $array = [];
         for($i = $wakeUpAt; $i < $sleepAt; $i++) {
@@ -153,7 +172,7 @@ class TimeBillService
      * @author  wxy
      * @ctime   2022/6/7 16:28
      */
-    private function getStatisticsColumns()
+    public function getStatisticsColumns()
     {
         return [
             '金币'."\r\n".'总计',   //  红色字+黄色底
@@ -168,44 +187,4 @@ class TimeBillService
         ];
     }
 
-    /**
-     * @desc    前两列(星期、日期)
-     * @param int $year
-     * @param int $quarter
-     * @return array
-     * @author  wxy
-     * @ctime   2022/6/7 17:30
-     */
-    private function getBaseData(int $year, int $quarter)
-    {
-        $endMonth = $quarter * 3 + 1;
-        $currentMonth = $endMonth - 3;
-
-        $currentDay = $year . '/'. $currentMonth . '/1';
-
-        $weekNoMap = [
-            '日',
-            '一',
-            '二',
-            '三',
-            '四',
-            '五',
-            '六',
-        ];
-
-        $data = [];
-        while ($currentMonth < $endMonth) {
-            $startWeekNo = date('w', strtotime($currentDay));
-            $data[] = [
-                $weekNoMap[$startWeekNo],//  星期
-                $currentDay//  日期
-            ];
-
-            $timestamp = strtotime($currentDay) + DateTimeHelper::ONE_DAY;
-            $currentDay = date('Y/n/d', $timestamp);
-            $currentMonth = date('n', $timestamp);
-        }
-
-        return $data;
-    }
 }

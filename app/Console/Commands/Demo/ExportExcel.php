@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\Demo;
 
+use App\Exports\TimeBillExport;
 use App\Helpers\ArrayHelper;
 use App\Services\Base\Export;
 use App\Services\TimeBillService;
@@ -45,9 +46,9 @@ class ExportExcel extends Command
         try {
 //            $this->exportAsArray();
 
-            $data = $this->service->getTimeBillData(2022, 3, 6, 23, '—');
+            $data = $this->service->getTimeBillData(2022, 3);
 
-            Excel::store(new Export([], $data), 'excel/2022H3-timeBill.xlsx', 'public');
+            Excel::store(new TimeBillExport($data), 'excel/2022H3-timeBill.xlsx', 'public');
         } catch (\Exception $e) {
             $logData = ArrayHelper::makeLogData($e, $this->description);
             \Log::error(ArrayHelper::logArrayToString($logData));
