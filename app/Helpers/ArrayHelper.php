@@ -141,4 +141,33 @@ class ArrayHelper
 
         return '';
     }
+
+    /**
+     * @desc    excel导入数据转数组(首行做key)
+     * @param array $excelData
+     * @return array
+     * @author  wxy
+     * @ctime   2022/6/7 12:07
+     */
+    public static function excelToArrayWithKey(array $excelData)
+    {
+        $keys = $excelData[0];
+        $count = count($keys);
+
+        $arrayData = [];
+        foreach ($excelData as $key => $row) {
+            if ($key == 0) {
+                continue;
+            }
+
+            $item = [];
+            for ($i = 0; $i < $count; $i++) {
+                $item[$keys[$i]] = $row[$i];
+            }
+
+            $arrayData[] = $item;
+        }
+
+        return $arrayData;
+    }
 }
