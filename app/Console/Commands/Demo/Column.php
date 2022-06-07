@@ -2,13 +2,14 @@
 
 namespace App\Console\Commands\Demo;
 
+use App\Helpers\ArrayHelper;
 use Illuminate\Console\Command;
 
 /**
  * 可指定目录 创建命令：php artisan make:command Demo/Column
  * 建议所有的命令文件放在Commands目录下。
  * 其他目录可以通过 app\Kernel.php 的 protected function commands() 设置引入
- * 
+ *
  */
 class Column extends Command
 {
@@ -33,6 +34,17 @@ class Column extends Command
      */
     public function handle()
     {
-        return 0;
+        $start = microtime(true);
+
+        try {
+            //  $this->service->doSomething();
+        } catch (\Exception $e) {
+            $logData = ArrayHelper::makeLogData($e, $this->description);
+            \Log::error(ArrayHelper::logArrayToString($logData));
+            $this->error($e->getMessage());
+        }
+
+        $exec = microtime(true) - $start;
+        $this->info('exec = ' . $exec);
     }
 }
