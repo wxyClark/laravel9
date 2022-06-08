@@ -39,10 +39,10 @@ class TimeBillService
         ];
         $weekOrderMap = [
             '',
-            '周目标',
+            '目标',
             '',
             '',
-            '周复盘',
+            '复盘',
             '',
             '',
         ];
@@ -53,15 +53,22 @@ class TimeBillService
             $weekOrder = date('W', strtotime($currentDay));
             $dayOrder = date('z', strtotime($currentDay));
 
+            $targetTxt = '';
+            if ($weekNo == 0) {
+                $targetTxt = '目标先行';
+            } elseif ($weekNo == 6) {
+                $targetTxt = '周复盘';
+            }
+
             $weekTxt = $weekOrderMap[$weekNo];
-            if (empty($weekNo)) {
+            if ($weekNo == 0) {
                 $weekTxt = '第' . $weekOrder . '周 | 第' . $dayOrder . '天';
             }
 
             $data[] = [
                 $weekNoMap[$weekNo],//  星期
                 $currentDay,//  日期
-                '目标先行',
+                $targetTxt,
                 $weekTxt,
             ];
 
