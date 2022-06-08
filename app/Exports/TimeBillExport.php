@@ -128,52 +128,68 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     //  设置颜色
     private function setColor($event)
     {
-        $cellConfig = ExcelHelper::$cellConfig;
+
+        $config = [
+            'workHigh' => ExcelHelper::setCellConfig('A9D08E'),  //  高效工作
+            'workLow' => ExcelHelper::setCellConfig('c6e0b4'),  //  强迫工作
+
+            'studyHigh' => ExcelHelper::setCellConfig('9bc2e6'),  //  高效学习
+            'studyLow' => ExcelHelper::setCellConfig('b4c6e7'),  //  低效学习
+
+            'lifeHigh' => ExcelHelper::setCellConfig('f4b084'),  //  高效娱乐
+            'lifeLow' => ExcelHelper::setCellConfig('f8cbad'),  //  底效消遣
+
+            'sleepHigh' => ExcelHelper::setCellConfig('f2ddfe'),  //  高效睡眠
+            'sleepLow' => ExcelHelper::setCellConfig('bfa5fa'),  //  低效拖延
+
+            'weekend' => ExcelHelper::setCellConfig('CCFFCC'),  //  周末
+            'summary' => ExcelHelper::setCellConfig('33CCCC'),  //  统计
+        ];
 
         //  时间段
-        $event->sheet->getDelegate()->getStyle('E1:G' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('E1:G' . $this->maxRowId)->applyFromArray($config['sleepHigh']);
 
-        $event->sheet->getDelegate()->getStyle('H1:J' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('K1:K' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']);
-        $event->sheet->getDelegate()->getStyle('L1:L' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']);
-        $event->sheet->getDelegate()->getStyle('M1:R' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('S1:S' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('T1:U' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
-        $event->sheet->getDelegate()->getStyle('V1:Y' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('Z1:Z' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']);
-        $event->sheet->getDelegate()->getStyle('AA1:AD' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('AE1:AG' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']);
-        $event->sheet->getDelegate()->getStyle('AH1:AM' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('H1:J' . $this->maxRowId)->applyFromArray($config['lifeLow']);
+        $event->sheet->getDelegate()->getStyle('K1:K' . $this->maxRowId)->applyFromArray($config['studyLow']);
+        $event->sheet->getDelegate()->getStyle('L1:L' . $this->maxRowId)->applyFromArray($config['workLow']);
+        $event->sheet->getDelegate()->getStyle('M1:R' . $this->maxRowId)->applyFromArray($config['workHigh']);
+        $event->sheet->getDelegate()->getStyle('S1:S' . $this->maxRowId)->applyFromArray($config['lifeLow']);
+        $event->sheet->getDelegate()->getStyle('T1:U' . $this->maxRowId)->applyFromArray($config['sleepHigh']);
+        $event->sheet->getDelegate()->getStyle('V1:Y' . $this->maxRowId)->applyFromArray($config['workHigh']);
+        $event->sheet->getDelegate()->getStyle('Z1:Z' . $this->maxRowId)->applyFromArray($config['workLow']);
+        $event->sheet->getDelegate()->getStyle('AA1:AD' . $this->maxRowId)->applyFromArray($config['workHigh']);
+        $event->sheet->getDelegate()->getStyle('AE1:AG' . $this->maxRowId)->applyFromArray($config['studyLow']);
+        $event->sheet->getDelegate()->getStyle('AH1:AM' . $this->maxRowId)->applyFromArray($config['lifeLow']);
 
-        $event->sheet->getDelegate()->getStyle('AN1:AN' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('AN1:AN' . $this->maxRowId)->applyFromArray($config['sleepHigh']);
 
         //  统计
-        $event->sheet->getDelegate()->getStyle('AO1:AO' . $this->maxRowId)->applyFromArray($cellConfig['redFontYellowGround']); //  金币总计
+        $event->sheet->getDelegate()->getStyle('AO1:AO' . $this->maxRowId)->applyFromArray($config['summary']); //  金币总计
 
-        $event->sheet->getDelegate()->getStyle('AP1:AP' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']); //  高效工作
-        $event->sheet->getDelegate()->getStyle('AQ1:AQ' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']); //  强迫工作
-        $event->sheet->getDelegate()->getStyle('AR1:AR' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']); //  自我提升
-        $event->sheet->getDelegate()->getStyle('AS1:AS' . $this->maxRowId)->applyFromArray($cellConfig['blackFontWhiteGround']); //  无效拖延
-        $event->sheet->getDelegate()->getStyle('AT1:AT' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']); //  陪伴
-        $event->sheet->getDelegate()->getStyle('AU1:AU' . $this->maxRowId)->applyFromArray($cellConfig['blackFontBrownGround']); //  娱乐
-        $event->sheet->getDelegate()->getStyle('AV1:AV' . $this->maxRowId)->applyFromArray($cellConfig['blueFontGrayGround']); //  杂事
-        $event->sheet->getDelegate()->getStyle('AW1:AW' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']); //  睡觉
+        $event->sheet->getDelegate()->getStyle('AP1:AP' . $this->maxRowId)->applyFromArray($config['workHigh']); //  高效工作
+        $event->sheet->getDelegate()->getStyle('AQ1:AQ' . $this->maxRowId)->applyFromArray($config['workLow']); //  强迫工作
+        $event->sheet->getDelegate()->getStyle('AR1:AR' . $this->maxRowId)->applyFromArray($config['studyLow']); //  自我提升
+        $event->sheet->getDelegate()->getStyle('AS1:AS' . $this->maxRowId)->applyFromArray($config['sleepLow']); //  无效拖延
+        $event->sheet->getDelegate()->getStyle('AT1:AT' . $this->maxRowId)->applyFromArray($config['lifeLow']); //  陪伴
+        $event->sheet->getDelegate()->getStyle('AU1:AU' . $this->maxRowId)->applyFromArray($config['lifeHigh']); //  娱乐
+        $event->sheet->getDelegate()->getStyle('AV1:AV' . $this->maxRowId)->applyFromArray($config['lifeLow']); //  杂事
+        $event->sheet->getDelegate()->getStyle('AW1:AW' . $this->maxRowId)->applyFromArray($config['sleepHigh']); //  睡觉
 
         //  周末
         foreach ($this->data as $key => $row) {
             $rowId = $key + 2;  //  周日的key 0,首行占1行
             if ($row[0] == '日') {
-                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
-                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($config['weekend']);
+                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($config['weekend']);
 
                 //  复盘区域
                 $reviewAreaStart = $rowId + 4;
                 $reviewAreaEnd = $rowId + 6;
-                $event->sheet->getDelegate()->getStyle('D'.$reviewAreaStart.':D'.$reviewAreaEnd)->applyFromArray($cellConfig['blackFontRedGround']);
+                $event->sheet->getDelegate()->getStyle('D'.$reviewAreaStart.':D'.$reviewAreaEnd)->applyFromArray($config['workHigh']);
             }
             if ($row[0] == '六') {
-                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
-                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($config['weekend']);
+                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($config['weekend']);
             }
         }
     }
