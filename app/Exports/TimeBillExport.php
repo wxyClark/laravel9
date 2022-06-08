@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Enums\ColorEnum;
 use App\Helpers\ExcelHelper;
 use App\Services\TimeBillService;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -12,6 +13,7 @@ use Maatwebsite\Excel\DefaultValueBinder;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class TimeBillExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithEvents
 {
@@ -66,11 +68,10 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-
                 // 冻结
                 $event->sheet->freezePaneByColumnAndRow('5','2');
 
-                //  设置样式
+                //  设置样式(字体、颜色;背景色;边框;填充)
                 $this->setStyle($event);
 
                 //  设置列宽
@@ -89,6 +90,9 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         $event->sheet->getDelegate()->getStyle('A1:AW1')->getFont()->setSize(12)->setBold(3);
         $event->sheet->getDelegate()->getStyle('A2:A' . $this->maxRowId)->getFont()->setSize(12)->setBold(2);
 
+        // 将第一行行高设置为30
+        $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(20);
+
         //  设置对齐
         $event->sheet->getDelegate()->getStyle('A1:A' . $this->maxRowId)->getAlignment()
             ->setVertical(Alignment::VERTICAL_CENTER)
@@ -96,9 +100,6 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         $event->sheet->getDelegate()->getStyle('B1:AW1')->getAlignment()
             ->setVertical(Alignment::VERTICAL_CENTER)
             ->setHorizontal(Alignment::HORIZONTAL_CENTER);
-
-        // 将第一行行高设置为30
-        $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
 
         //自动换行
         $event->sheet->getDelegate()->getStyle('C2:C' . $this->maxRowId)->getAlignment()->setWrapText(true);
@@ -140,6 +141,33 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     //  设置颜色
     private function setColor($event)
     {
+        $borders = [
+            'top' => [
+                'borderStyle' => Border::BORDER_DASHDOT,
+                'color' => [
+                    'rgb' => ColorEnum::GRAY
+                ]
+            ],
+            'right' => [
+                'borderStyle' => Border::BORDER_THIN,
+                'color' => [
+                    'rgb' => ColorEnum::GRAY
+                ]
+            ],
+            'bottom' => [
+                'borderStyle' => Border::BORDER_HAIR,
+                'color' => [
+                    'rgb' => ColorEnum::GRAY
+                ]
+            ],
+            'left' => [
+                'borderStyle' => Border::BORDER_THIN,
+                'color' => [
+                    'rgb' => ColorEnum::GRAY
+                ]
+            ],
+        ];
+
         $config = [
             'workHigh' => ExcelHelper::setCellConfig('9ED048'),  //  高效工作
             'workLow' => ExcelHelper::setCellConfig('C6E0B4'),  //  强迫工作
@@ -154,7 +182,7 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
             'sleepLow' => ExcelHelper::setCellConfig('BACAC6'),  //  低效拖延
 
             'weekend' => ExcelHelper::setCellConfig('BCE672'),  //  周末
-            'summary' => ExcelHelper::setCellConfig('F2BE45'),  //  统计
+            'summary' => ExcelHelper::setCellConfig('F2BE45', $borders),  //  统计
         ];
 
         //  时间段
@@ -208,12 +236,6 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
                 $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($config['weekend']);
             }
         }
-    }
-
-    //  设置边框
-    private function setBolder($event)
-    {
-
     }
 
 }

@@ -3,9 +3,6 @@
 
 namespace App\Helpers;
 
-
-use App\Enums\ColorEnum;
-
 class ExcelHelper
 {
 
@@ -17,7 +14,7 @@ class ExcelHelper
      * @author  wxy
      * @ctime   2022/6/8 13:14
      */
-    public static function setCellConfig(string $bgColor, string $fontColor = '000000')
+    public static function setCellConfig(string $bgColor, array $borders = [], string $fontColor = '000000')
     {
         return [
             'font' => [
@@ -39,7 +36,28 @@ class ExcelHelper
                 'endColor' => [
                     'argb' => $bgColor,
                 ]
-            ]
+            ],
+            'borders' => $borders,
+//            'borders' => [
+//                  'bottom' => [
+//                      'borderStyle' => Border::BORDER_DASHDOT,
+//                      'color' => [
+//                          'rgb' => '808080'
+//                     ]
+//                  ],
+//                  'top' => [
+//                      'borderStyle' => Border::BORDER_DASHDOT,
+//                      'color' => [
+//                          'rgb' => '808080'
+//                     ]
+//                  ]
+//              ],
+//              'alignment' => [
+//                  'horizontal' => Alignment::HORIZONTAL_CENTER,
+//                  'vertical' => Alignment::VERTICAL_CENTER,
+//                  'wrapText' => true,
+//              ],
+//            'quotePrefix'    => true
         ];
     }
 }
