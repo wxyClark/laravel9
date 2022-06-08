@@ -257,5 +257,49 @@ class ExcelHelper
                 ]
             ]
         ],
+        'blackFontIndigoBlueGround' => [
+            'font' => [
+                'name' => '楷体',
+                'bold' => true,
+                'italic' => false,
+                'strikethrough' => false,
+                'color' => [
+                    'rgb' => ColorEnum::BLACK,
+                ]
+            ],
+            'fill' => [
+                'fillType' => 'linear', //线性填充，类似渐变
+                'rotation' => 45, //渐变角度
+                'startColor' => [
+                    'rgb' => ColorEnum::INDIGO_BLUE, //初始颜色
+                ],
+                //结束颜色，如果需要单一背景色，请和初始颜色保持一致
+                'endColor' => [
+                    'argb' => ColorEnum::INDIGO_BLUE,
+                ]
+            ]
+        ],
+        'yellowFontBlueGround' => [
+            'font' => [
+                'name' => '楷体',
+                'bold' => true,
+                'italic' => false,
+                'strikethrough' => false,
+                'color' => [
+                    'rgb' => ColorEnum::YELLOW,
+                ]
+            ],
+            'fill' => [
+                'fillType' => 'linear', //线性填充，类似渐变
+                'rotation' => 45, //渐变角度
+                'startColor' => [
+                    'rgb' => ColorEnum::BLUE, //初始颜色
+                ],
+                //结束颜色，如果需要单一背景色，请和初始颜色保持一致
+                'endColor' => [
+                    'argb' => ColorEnum::BLUE,
+                ]
+            ]
+        ],
     ];
 }

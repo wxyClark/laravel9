@@ -19,13 +19,15 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     private $data;
     private $wakeUpAt = 6;
     private $sleepAt = 23;
-    private $separator = '-';
+    private $separator = '——';
 
     private $column = 0;
+    private $maxRowId = 0;
 
     public function __construct($data)
     {
         $this->data = $data;
+        $this->maxRowId = count($data) + 1; //  表头占1行
     }
 
     /**
@@ -71,11 +73,11 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
 
                 // 所有表头-设置字体
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getFont()->setSize(12)->setBold(3);
-                $event->sheet->getDelegate()->getStyle('A2:A99')->getFont()->setSize(12)->setBold(2);
+                $event->sheet->getDelegate()->getStyle('A2:A' . $this->maxRowId)->getFont()->setSize(12)->setBold(2);
 
                 //  设置对齐
-                $event->sheet->getDelegate()->getStyle('A1:A99')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-                $event->sheet->getDelegate()->getStyle('A1:A99')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $event->sheet->getDelegate()->getStyle('A1:A' . $this->maxRowId)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $event->sheet->getDelegate()->getStyle('A1:A' . $this->maxRowId)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
@@ -83,8 +85,8 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
                 $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
 
                 //自动换行
-                $event->sheet->getDelegate()->getStyle('C2:C99')->getAlignment()->setWrapText(true);
-                $event->sheet->getDelegate()->getStyle('D2:D99')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('C2:C' . $this->maxRowId)->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('D2:D' . $this->maxRowId)->getAlignment()->setWrapText(true);
 
                 //  设置列宽
                 $this->setWidth($event);
@@ -104,7 +106,7 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         $event->sheet->getDelegate()->getColumnDimension('A')->setWidth(5);
         $event->sheet->getDelegate()->getColumnDimension('B')->setWidth(10);
         $event->sheet->getDelegate()->getColumnDimension('C')->setWidth(16);
-        $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(16);
+        $event->sheet->getDelegate()->getColumnDimension('D')->setWidth(20);
 
         //设置列宽—— 时段
         $keys = array_keys($header);
@@ -129,33 +131,40 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         $cellConfig = ExcelHelper::$cellConfig;
 
         //  时间段
-        $event->sheet->getDelegate()->getStyle('E1:G1')->applyFromArray($cellConfig['greenFontBlackGround']);
-        $event->sheet->getDelegate()->getStyle('H1:K1')->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('L1:L99')->applyFromArray($cellConfig['blackFontOrangeGround']);
-        $event->sheet->getDelegate()->getStyle('M1:R1')->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('S1:S99')->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('T1:U1')->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('V1:Y1')->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('Z1:Z99')->applyFromArray($cellConfig['blackFontOrangeGround']);
-        $event->sheet->getDelegate()->getStyle('AA1:AD1')->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('E1:G' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
+
+        $event->sheet->getDelegate()->getStyle('H1:J' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('K1:K' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']);
+        $event->sheet->getDelegate()->getStyle('L1:L' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']);
+        $event->sheet->getDelegate()->getStyle('M1:R' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('S1:S' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('T1:U' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('V1:Y' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('Z1:Z' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']);
+        $event->sheet->getDelegate()->getStyle('AA1:AD' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('AE1:AG' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']);
+        $event->sheet->getDelegate()->getStyle('AH1:AM' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+
+        $event->sheet->getDelegate()->getStyle('AN1:AN' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']);
 
         //  统计
-        $event->sheet->getDelegate()->getStyle('AN1:AN99')->applyFromArray($cellConfig['greenFontBlackGround']);
-        $event->sheet->getDelegate()->getStyle('AO1:AO99')->applyFromArray($cellConfig['redFontYellowGround']);
-        $event->sheet->getDelegate()->getStyle('AP1:AP99')->applyFromArray($cellConfig['blackFontRedGround']);
-        $event->sheet->getDelegate()->getStyle('AQ1:AQ99')->applyFromArray($cellConfig['blackFontOrangeGround']);
-        $event->sheet->getDelegate()->getStyle('AR1:AR99')->applyFromArray($cellConfig['blackFontYellowGround']);
-        $event->sheet->getDelegate()->getStyle('AS1:AS99')->applyFromArray($cellConfig['blackFontBrownGround']);
-        $event->sheet->getDelegate()->getStyle('AT1:AT99')->applyFromArray($cellConfig['blackFontGreenGround']);
-        $event->sheet->getDelegate()->getStyle('AU1:AU99')->applyFromArray($cellConfig['blueFontGrayGround']);
-        $event->sheet->getDelegate()->getStyle('AV1:AV99')->applyFromArray($cellConfig['blackFontWhiteGround']);
-        $event->sheet->getDelegate()->getStyle('AW1:AW99')->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('AO1:AO' . $this->maxRowId)->applyFromArray($cellConfig['redFontYellowGround']); //  金币总计
+
+        $event->sheet->getDelegate()->getStyle('AP1:AP' . $this->maxRowId)->applyFromArray($cellConfig['blackFontRedGround']); //  高效工作
+        $event->sheet->getDelegate()->getStyle('AQ1:AQ' . $this->maxRowId)->applyFromArray($cellConfig['blackFontOrangeGround']); //  强迫工作
+        $event->sheet->getDelegate()->getStyle('AR1:AR' . $this->maxRowId)->applyFromArray($cellConfig['blackFontYellowGround']); //  自我提升
+        $event->sheet->getDelegate()->getStyle('AS1:AS' . $this->maxRowId)->applyFromArray($cellConfig['blackFontWhiteGround']); //  无效拖延
+        $event->sheet->getDelegate()->getStyle('AT1:AT' . $this->maxRowId)->applyFromArray($cellConfig['blackFontGreenGround']); //  陪伴
+        $event->sheet->getDelegate()->getStyle('AU1:AU' . $this->maxRowId)->applyFromArray($cellConfig['blackFontBrownGround']); //  娱乐
+        $event->sheet->getDelegate()->getStyle('AV1:AV' . $this->maxRowId)->applyFromArray($cellConfig['blueFontGrayGround']); //  杂事
+        $event->sheet->getDelegate()->getStyle('AW1:AW' . $this->maxRowId)->applyFromArray($cellConfig['greenFontBlackGround']); //  睡觉
 
         //  周末
         foreach ($this->data as $key => $row) {
-            $rowId = $key + 2;
+            $rowId = $key + 2;  //  周日的key 0,首行占1行
             if ($row[0] == '日') {
-                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
+                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
 
                 //  复盘区域
                 $reviewAreaStart = $rowId + 4;
@@ -163,7 +172,8 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
                 $event->sheet->getDelegate()->getStyle('D'.$reviewAreaStart.':D'.$reviewAreaEnd)->applyFromArray($cellConfig['blackFontRedGround']);
             }
             if ($row[0] == '六') {
-                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
+                $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($cellConfig['yellowFontBlueGround']);
             }
         }
     }
