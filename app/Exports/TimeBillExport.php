@@ -204,7 +204,7 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
                 $event->sheet->mergeCells('D'.$targetAreaStart.':D'.$targetAreaEnd);
             }
             if ($row[0] == '六') {
-                $event->sheet->getDelegate()->getStyle('A'.$rowId.':D'.$rowId)->applyFromArray($config['weekend']);
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':C'.$rowId)->applyFromArray($config['weekend']);
                 $event->sheet->getDelegate()->getStyle('H'.$rowId.':AM'.$rowId)->applyFromArray($config['weekend']);
             }
         }
