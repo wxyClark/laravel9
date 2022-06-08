@@ -141,48 +141,55 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     //  设置颜色
     private function setColor($event)
     {
-        $borders = [
+        $summaryBorders = ExcelHelper::getBordersConfig([
             'top' => [
-                'borderStyle' => Border::BORDER_DASHDOT,
-                'color' => [
-                    'rgb' => ColorEnum::GRAY
-                ]
+                'style' => Border::BORDER_DASHDOT,
+                'color' => ColorEnum::GRAY,
             ],
             'right' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => [
-                    'rgb' => ColorEnum::GRAY
-                ]
+                'style' => Border::BORDER_THIN,
+                'color' => ColorEnum::GRAY,
             ],
             'bottom' => [
-                'borderStyle' => Border::BORDER_HAIR,
-                'color' => [
-                    'rgb' => ColorEnum::GRAY
-                ]
+                'style' => Border::BORDER_HAIR,
+                'color' => ColorEnum::GRAY,
             ],
             'left' => [
-                'borderStyle' => Border::BORDER_THIN,
-                'color' => [
-                    'rgb' => ColorEnum::GRAY
-                ]
+                'style' => Border::BORDER_THIN,
+                'color' => ColorEnum::GRAY,
             ],
-        ];
+        ]);
+
+        $defaultBorders = ExcelHelper::getBordersConfig([
+            'top' => [
+                'style' => Border::BORDER_THIN,
+            ],
+            'right' => [
+                'style' => Border::BORDER_THIN,
+            ],
+            'bottom' => [
+                'style' => Border::BORDER_THIN,
+            ],
+            'left' => [
+                'style' => Border::BORDER_THIN,
+            ],
+        ]);
 
         $config = [
-            'workHigh' => ExcelHelper::setCellConfig('9ED048'),  //  高效工作
-            'workLow' => ExcelHelper::setCellConfig('C6E0B4'),  //  强迫工作
+            'workHigh' => ExcelHelper::getCellConfig('9ED048', $defaultBorders),  //  高效工作
+            'workLow' => ExcelHelper::getCellConfig('C6E0B4', $defaultBorders),  //  强迫工作
 
-            'studyHigh' => ExcelHelper::setCellConfig('9BC2E6'),  //  高效学习
-            'studyLow' => ExcelHelper::setCellConfig('B4C6E7'),  //  低效学习
+            'studyHigh' => ExcelHelper::getCellConfig('9BC2E6', $defaultBorders),  //  高效学习
+            'studyLow' => ExcelHelper::getCellConfig('B4C6E7', $defaultBorders),  //  低效学习
 
-            'lifeHigh' => ExcelHelper::setCellConfig('F4B084'),  //  高效娱乐
-            'lifeLow' => ExcelHelper::setCellConfig('F8CBAD'),  //  底效消遣
+            'lifeHigh' => ExcelHelper::getCellConfig('F4B084', $defaultBorders),  //  高效娱乐
+            'lifeLow' => ExcelHelper::getCellConfig('F8CBAD', $defaultBorders),  //  底效消遣
 
-            'sleepHigh' => ExcelHelper::setCellConfig('424c50'),  //  高效睡眠
-            'sleepLow' => ExcelHelper::setCellConfig('BACAC6'),  //  低效拖延
+            'sleepHigh' => ExcelHelper::getCellConfig('424c50', $defaultBorders),  //  高效睡眠
+            'sleepLow' => ExcelHelper::getCellConfig('BACAC6', $defaultBorders),  //  低效拖延
 
-            'weekend' => ExcelHelper::setCellConfig('BCE672'),  //  周末
-            'summary' => ExcelHelper::setCellConfig('F2BE45', $borders),  //  统计
+            'weekend' => ExcelHelper::getCellConfig('BCE672'),  //  周末
+            'summary' => ExcelHelper::getCellConfig('F2BE45', $summaryBorders),  //  统计
         ];
 
         //  时间段

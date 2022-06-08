@@ -3,8 +3,30 @@
 
 namespace App\Helpers;
 
+use App\Enums\ColorEnum;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+
 class ExcelHelper
 {
+    //  默认边框设置
+    public static $defaultBorders = [
+        'top' => [
+            'style' => Border::BORDER_THIN,
+            'color' => ColorEnum::BLACK,
+        ],
+        'right' => [
+            'style' => Border::BORDER_THIN,
+            'color' => ColorEnum::BLACK,
+        ],
+        'bottom' => [
+            'style' => Border::BORDER_THIN,
+            'color' => ColorEnum::BLACK,
+        ],
+        'left' => [
+            'style' => Border::BORDER_THIN,
+            'color' => ColorEnum::BLACK,
+        ],
+    ];
 
     /**
      * @desc    设置单元格的样式(底色、渐变,文字颜色、字体)
@@ -14,7 +36,7 @@ class ExcelHelper
      * @author  wxy
      * @ctime   2022/6/8 13:14
      */
-    public static function setCellConfig(string $bgColor, array $borders = [], string $fontColor = '000000')
+    public static function getCellConfig(string $bgColor, array $borders = [], string $fontColor = '000000')
     {
         return [
             'font' => [
@@ -59,5 +81,32 @@ class ExcelHelper
 //              ],
 //            'quotePrefix'    => true
         ];
+    }
+
+    /**
+     * @desc    设置边框样式
+     * @return array[]
+     * @author  wxy
+     * @ctime   2022/6/8 19:02
+     */
+    public static function getBordersConfig($borders = [])
+    {
+        $borders = array_merge(self::$defaultBorders, $borders);
+
+        $bordersConfig = [];
+        foreach ($borders as $side => $config) {
+            if (!in_array($side, ['top', 'right', 'bottom', 'left'])) {
+                continue;
+            }
+
+            $bordersConfig[$side] = [
+                'borderStyle' => $config['style'] ,
+                'color' => [
+                    'rgb' => $config['color'] ?? ''
+                ]
+            ];
+        }
+
+        return $bordersConfig;
     }
 }
