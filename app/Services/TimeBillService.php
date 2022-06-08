@@ -37,13 +37,32 @@ class TimeBillService
             '五',
             '六',
         ];
+        $weekOrderMap = [
+            '',
+            '周目标',
+            '',
+            '',
+            '周复盘',
+            '',
+            '',
+        ];
 
         $data = [];
         while ($currentMonth < $endMonth) {
-            $startWeekNo = date('w', strtotime($currentDay));
+            $weekNo = date('w', strtotime($currentDay));
+            $weekOrder = date('W', strtotime($currentDay));
+            $dayOrder = date('z', strtotime($currentDay));
+
+            $weekTxt = $weekOrderMap[$weekNo];
+            if (empty($weekNo)) {
+                $weekTxt = '第' . $weekOrder . '周 | 第' . $dayOrder . '天';
+            }
+
             $data[] = [
-                $weekNoMap[$startWeekNo],//  星期
-                $currentDay//  日期
+                $weekNoMap[$weekNo],//  星期
+                $currentDay,//  日期
+                '目标先行',
+                $weekTxt,
             ];
 
             $timestamp = strtotime($currentDay) + DateTimeHelper::ONE_DAY;
@@ -175,15 +194,15 @@ class TimeBillService
     public function getStatisticsColumns()
     {
         return [
-            '金币'."\r\n".'总计',   //  红色字+黄色底
-            '高效'."\r\n".'工作',   //  红色
-            '强迫'."\r\n".'工作',   //  橙色
-            '自我'."\r\n".'提升',   //  黄色
-            '尽兴'."\r\n".'娱乐',   //  蓝色
-            '陪'."\r\n".'伴',      //  绿色
-            '杂'."\r\n".'事',      //  灰色
-            '无效'."\r\n".'拖延',   //  白色
-            '睡觉'."\r\n".'回血',   //  黑色
+            '金币'."\r\n".'总计',
+            '高效'."\r\n".'工作',
+            '强迫'."\r\n".'工作',
+            '自我'."\r\n".'提升',
+            '尽兴'."\r\n".'娱乐',
+            '陪'."\r\n".'伴',
+            '杂'."\r\n".'事',
+            '无效'."\r\n".'拖延',
+            '睡'."\r\n".'觉',
         ];
     }
 

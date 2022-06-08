@@ -2,6 +2,8 @@
 
 namespace App\Exports;
 
+use App\Enums\ColorEnum;
+use App\Helpers\ExcelHelper;
 use App\Services\TimeBillService;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
@@ -63,6 +65,10 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
+
+                // 冻结
+                $event->sheet->freezePaneByColumnAndRow('5','2');
+
                 // 所有表头-设置字体
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getFont()->setSize(12)->setBold(3);
                 $event->sheet->getDelegate()->getStyle('A2:A99')->getFont()->setSize(12)->setBold(2);
@@ -72,16 +78,19 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
                 $event->sheet->getDelegate()->getStyle('A1:A99')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
                 $event->sheet->getDelegate()->getStyle('A1:AW1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-//                $event->sheet->getDelegate()->getStyle('B2:B'.$this->column)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
-//                //设置列宽
+
                 // 将第一行行高设置为30
                 $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(30);
-//
-//                //自动换行
-                $event->sheet->getDelegate()->getStyle('C2:C99'.$this->column)->getAlignment()->setWrapText(true);
+
+                //自动换行
+                $event->sheet->getDelegate()->getStyle('C2:C99')->getAlignment()->setWrapText(true);
+                $event->sheet->getDelegate()->getStyle('D2:D99')->getAlignment()->setWrapText(true);
 
                 //  设置列宽
                 $this->setWidth($event);
+
+                //  设置颜色
+                $this->setColor($event);
             },
         ];
     }
@@ -113,4 +122,62 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
             $event->sheet->getDelegate()->getColumnDimension((string)$columnKey)->setWidth(10);
         }
     }
+
+    //  设置颜色
+    private function setColor($event)
+    {
+        $cellConfig = ExcelHelper::$cellConfig;
+
+        //  时间段
+        $event->sheet->getDelegate()->getStyle('E1:G1')->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('H1:K1')->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('L1:L99')->applyFromArray($cellConfig['blackFontOrangeGround']);
+        $event->sheet->getDelegate()->getStyle('M1:R1')->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('S1:S99')->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('T1:U1')->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('V1:Y1')->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('Z1:Z99')->applyFromArray($cellConfig['blackFontOrangeGround']);
+        $event->sheet->getDelegate()->getStyle('AA1:AD1')->applyFromArray($cellConfig['blackFontRedGround']);
+
+        //  统计
+        $event->sheet->getDelegate()->getStyle('AN1:AN99')->applyFromArray($cellConfig['greenFontBlackGround']);
+        $event->sheet->getDelegate()->getStyle('AO1:AO99')->applyFromArray($cellConfig['redFontYellowGround']);
+        $event->sheet->getDelegate()->getStyle('AP1:AP99')->applyFromArray($cellConfig['blackFontRedGround']);
+        $event->sheet->getDelegate()->getStyle('AQ1:AQ99')->applyFromArray($cellConfig['blackFontOrangeGround']);
+        $event->sheet->getDelegate()->getStyle('AR1:AR99')->applyFromArray($cellConfig['blackFontYellowGround']);
+        $event->sheet->getDelegate()->getStyle('AS1:AS99')->applyFromArray($cellConfig['blackFontBrownGround']);
+        $event->sheet->getDelegate()->getStyle('AT1:AT99')->applyFromArray($cellConfig['blackFontGreenGround']);
+        $event->sheet->getDelegate()->getStyle('AU1:AU99')->applyFromArray($cellConfig['blueFontGrayGround']);
+        $event->sheet->getDelegate()->getStyle('AV1:AV99')->applyFromArray($cellConfig['blackFontWhiteGround']);
+        $event->sheet->getDelegate()->getStyle('AW1:AW99')->applyFromArray($cellConfig['greenFontBlackGround']);
+
+        //  周末
+        foreach ($this->data as $key => $row) {
+            $rowId = $key + 2;
+            if ($row[0] == '日') {
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+
+                //  复盘区域
+                $reviewAreaStart = $rowId + 4;
+                $reviewAreaEnd = $rowId + 6;
+                $event->sheet->getDelegate()->getStyle('D'.$reviewAreaStart.':D'.$reviewAreaEnd)->applyFromArray($cellConfig['blackFontRedGround']);
+            }
+            if ($row[0] == '六') {
+                $event->sheet->getDelegate()->getStyle('A'.$rowId.':B'.$rowId)->applyFromArray($cellConfig['blackFontGreenGround']);
+            }
+        }
+    }
+
+    //  设置边框
+    private function setBolder($event)
+    {
+
+    }
+
+    //  合并单元格
+    private function mergeCells($event)
+    {
+
+    }
+
 }
