@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands\Demo;
 
-use App\Exports\TimeBillExport;
 use App\Helpers\ArrayHelper;
 use App\Services\TimeBillService;
 use Illuminate\Console\Command;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ExportExcel extends Command
 {
@@ -24,14 +22,6 @@ class ExportExcel extends Command
      */
     protected $description = '导出Excel';
 
-    private $service;
-
-    public function __construct(TimeBillService $service)
-    {
-        parent::__construct();
-        $this->service = $service;
-    }
-
 
     /**
      * Execute the console command.
@@ -43,11 +33,10 @@ class ExportExcel extends Command
         $start = microtime(true);
 
         try {
-//            $this->exportAsArray();
 
-            $data = $this->service->getTimeBillData(2022, 3);
+            //  指定 年份、季度 生成时间记录表
+            app(TimeBillService::class)->exportTimeBill(2022, 3);
 
-            Excel::store(new TimeBillExport($data), 'excel/2022H3-timeBill.xlsx', 'public');
         } catch (\Exception $e) {
             $logData = ArrayHelper::makeLogData($e, $this->description);
             \Log::error(ArrayHelper::logArrayToString($logData));

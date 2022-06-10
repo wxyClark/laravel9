@@ -3,7 +3,9 @@
 
 namespace App\Services;
 
+use App\Exports\TimeBillExport;
 use App\Helpers\DateTimeHelper;
+use Maatwebsite\Excel\Facades\Excel;
 
 /**
  * @desc    时间账单服务
@@ -17,11 +19,11 @@ class TimeBillService
      * @desc    导出时间账单(前两列 —— 星期、日期)
      * @param int $year
      * @param int $quarter
-     * @return array
+     * @return bool
      * @author  wxy
-     * @ctime   2022/6/7 18:06
+     * @ctime   2022/6/10 10:13
      */
-    public function getTimeBillData(int $year, int $quarter)
+    public function exportTimeBill(int $year, int $quarter)
     {
         $endMonth = $quarter * 3 + 1;
         $currentMonth = $endMonth - 3;
@@ -77,7 +79,7 @@ class TimeBillService
             $currentMonth = date('n', $timestamp);
         }
 
-        return $data;
+        return Excel::store(new TimeBillExport($data), 'excel/'.$year.'H'.$quarter.'-timeBill.xlsx', 'public');
     }
 
     /**
