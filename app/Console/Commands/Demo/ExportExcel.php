@@ -35,8 +35,10 @@ class ExportExcel extends Command
         try {
 
             //  指定 年份、季度 生成时间记录表
-            app(TimeBillService::class)->exportTimeBill(2022, 3);
+//            app(TimeBillService::class)->exportTimeBill(2022, 3);
 
+            //  指定 年份 生成时间总结表
+            $data = app(TimeSummaryService::class)->exportTimeSummary(2022);
         } catch (\Exception $e) {
             $logData = ArrayHelper::makeLogData($e, $this->description);
             \Log::error(ArrayHelper::logArrayToString($logData));
