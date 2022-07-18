@@ -5,6 +5,8 @@ namespace App\Exports;
 use App\Enums\ColorEnum;
 use App\Helpers\ExcelHelper;
 use App\Services\TimeBillService;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -14,6 +16,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 class TimeBillExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithEvents
 {
@@ -24,6 +27,7 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
 
     private $column = 0;
     private $maxRowId = 0;
+    private $imageArr = [];
 
     public function __construct($data)
     {
@@ -79,6 +83,9 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
 
                 //  设置颜色
                 $this->setColor($event);
+
+                //  设置背景图片
+                $this->setBgImg($event);
             },
         ];
     }
@@ -245,4 +252,50 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         }
     }
 
+    //  设置图片背景
+    private function setBgImg($event)
+    {
+        //  TODO 周日给背景图片 小太阳
+        $sundayImg = 'http://img/';
+
+        foreach ($this->data as $key => $row) {
+            $rowId = $key + 2;  //  周日的key 0,首行占1行
+            //  节假日
+            if ($row[1] == '2022/7/10') {
+                //  TODO 春节、元宵节、清明节、端午节、中秋节、
+                //  TODO 家人生日
+                //  TODO 节假日
+            }
+            elseif ($row[0] == '日') {
+                $client = new Client();
+                $data = $client->request('get', $sundayImg)->getBody()->getContents();
+                Storage::disk('local')->put($sundayImg, $data);
+                $filename = storage_path('app') . '/timeBillExport/'.$sundayImg;
+                $this->imageArr[] = $filename;
+
+                $event->getSheet()->getDelegate()->getRowDimension($rowId)->setRowHeight(80);
+
+                $drawing = new Drawing();
+                $drawing->setName('周日背景');
+                $drawing->setDescription('周日背景图');
+                $drawing->setPath($filename);
+                $drawing->setHeight(10);
+                $drawing->setCoordinates('B' . $rowId);
+                $drawing->setOffsetX(1);
+                $drawing->setOffsetY(1);
+                $drawing->setWorksheet($event->getSheet()->getDelegate());
+            }
+
+        }
+    }
+
+    //  释放图片资源
+    public function __destruct()
+    {
+        foreach ($this->imageArr as $v){
+            if(file_exists($v)){
+                unlink($v);
+            }
+        }
+    }
 }

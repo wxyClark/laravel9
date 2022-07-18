@@ -26,8 +26,6 @@ class TimeSummaryService
     public function exportTimeSummary(int $year)
     {
 
-
-
         $weekNoMap = [
             '日',
             '一',
