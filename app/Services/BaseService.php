@@ -59,10 +59,11 @@ class BaseService
      * @author  wxy
      * @ctime   2022/7/18 12:03
      */
-    public static function logThrowable(\Throwable $throwable, string $title)
+    public static function logThrowable(\Throwable $throwable, string $title, array $params)
     {
         $logData = ArrayHelper::makeLogData($throwable, $title);
-        Log::error(__CLASS__.'异常', ArrayHelper::logArrayToString($logData));
+        $logData['params'] = $logData;
+        Log::error(__CLASS__.'@'.__FUNCTION__.'异常', ArrayHelper::logArrayToString($logData));
     }
 
     /**
@@ -70,9 +71,9 @@ class BaseService
      * @author  wxy
      * @ctime   2022/7/18 11:20
      */
-    protected function logResult()
+    protected function logResult($data)
     {
-
+        Log::info(__CLASS__.'@'.__FUNCTION__.' 结果：', ArrayHelper::logArrayToString($data));
     }
 
     /**
@@ -82,7 +83,7 @@ class BaseService
      */
     final function publicDemo(int $tenant_id, array $params)
     {
-        $title = '业务名称';
+        $title = '模块名称 业务名称';
 
         //  读数据
         try {
@@ -91,7 +92,7 @@ class BaseService
 
         } catch (\Exception $e) {
             if ($e->getCode() !== BaseService::CODE) {
-                self::logThrowable($e, $title . ' 读异常');
+                self::logThrowable($e, $title . ' 读异常', $params);
             }
 
             throw new \Exception($e->getMessage(), $e->getCode());
@@ -108,10 +109,10 @@ class BaseService
             DB::rollBack();
 
             if ($e->getCode() !== BaseService::CODE) {
-                self::logThrowable($e, $title . ' 写异常');
+                self::logThrowable($e, $title . ' 写异常', $params);
             }
 
-            throw new \Exception($e->getMessage() . ' 处理失败：',$e->getMessage(), $e->getCode());
+            throw new \Exception($title . ' 处理失败：',$e->getMessage(), $e->getCode());
         }
 
         return [
