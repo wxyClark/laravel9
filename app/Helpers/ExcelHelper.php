@@ -3,7 +3,7 @@
 
 namespace App\Helpers;
 
-use App\Enums\ColorEnum;
+use App\Enums\ColorEnums;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class ExcelHelper
@@ -12,19 +12,19 @@ class ExcelHelper
     public static $defaultBorders = [
         'top' => [
             'style' => Border::BORDER_THIN,
-            'color' => ColorEnum::BLACK,
+            'color' => ColorEnums::BLACK,
         ],
         'right' => [
             'style' => Border::BORDER_THIN,
-            'color' => ColorEnum::BLACK,
+            'color' => ColorEnums::BLACK,
         ],
         'bottom' => [
             'style' => Border::BORDER_THIN,
-            'color' => ColorEnum::BLACK,
+            'color' => ColorEnums::BLACK,
         ],
         'left' => [
             'style' => Border::BORDER_THIN,
-            'color' => ColorEnum::BLACK,
+            'color' => ColorEnums::BLACK,
         ],
     ];
 

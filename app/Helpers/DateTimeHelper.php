@@ -16,4 +16,5 @@ class DateTimeHelper
     const ONE_MONTH = 86400 * 30;
 
     const HALF_YEAR = 86400 * 180;
+
 }

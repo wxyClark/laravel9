@@ -25,8 +25,9 @@ class TimeBillService
      */
     public function exportTimeBill(int $year, int $quarter)
     {
-        $endMonth = $quarter * 3 + 1;
-        $currentMonth = $endMonth - 3;
+        $endMonth = $quarter * 3;
+        $currentMonth = $endMonth - 2;
+        $currentYear = $year = date('Y');
 
         $currentDay = $year . '/'. $currentMonth . '/1';
 
@@ -50,7 +51,7 @@ class TimeBillService
         ];
 
         $data = [];
-        while ($currentMonth < $endMonth) {
+        while ($currentMonth <= $endMonth && $currentYear == $year) {
             $weekNo = date('w', strtotime($currentDay));
             $weekOrder = date('W', strtotime($currentDay));
             $dayOrder = date('z', strtotime($currentDay));
@@ -77,6 +78,7 @@ class TimeBillService
             $timestamp = strtotime($currentDay) + DateTimeHelper::ONE_DAY;
             $currentDay = date('Y/n/d', $timestamp);
             $currentMonth = date('n', $timestamp);
+            $currentYear = date('Y', $timestamp);
         }
 
         return Excel::store(new TimeBillExport($data), 'excel/'.$year.'H'.$quarter.'-timeBill.xlsx', 'public');

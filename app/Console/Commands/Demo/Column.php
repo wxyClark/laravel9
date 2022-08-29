@@ -3,6 +3,7 @@
 namespace App\Console\Commands\Demo;
 
 use App\Helpers\ArrayHelper;
+use App\Repositorys\Demo\PhotoRepository;
 use Illuminate\Console\Command;
 
 /**
@@ -36,6 +37,7 @@ class Column extends Command
     {
         $start = microtime(true);
 
+        app(PhotoRepository::class)->getList();
         try {
             //  $this->service->doSomething();
         } catch (\Exception $e) {

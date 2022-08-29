@@ -19,12 +19,12 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 /**
- * @desc 行：日期；列：时段
+ * @desc 行：时段；列：日期
  * @author wxy
  * @ctime 2022/8/29 15:58
  * @package App\Exports
  */
-class TimeBillExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithEvents
+class TimeListExport extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithEvents
 {
     private $data;
     private $wakeUpAt = 6;
@@ -32,7 +32,6 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
     private $separator = '——';
 
     private $maxRowId = 0;
-
     private $imageArr = [];
 
     public function __construct($data)
@@ -78,19 +77,19 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 // 冻结
-                $event->sheet->freezePaneByColumnAndRow('5','2');
+                $event->sheet->freezePaneByColumnAndRow('2','11');
 
                 //  设置样式(字体、颜色;背景色;边框;填充)
-                $this->setStyle($event);
+//                $this->setStyle($event);
 
                 //  设置列宽
-                $this->setWidth($event);
+//                $this->setWidth($event);
 
                 //  设置颜色
-                $this->setColor($event);
+//                $this->setColor($event);
 
                 //  设置背景图片
-                $this->setBgImg($event);
+//                $this->setBgImg($event);
             },
         ];
     }
@@ -272,15 +271,15 @@ class TimeBillExport extends DefaultValueBinder implements FromCollection, WithC
 
         $festival = [
             //  元旦节
-            '/01/01',
+            '/1/1',
             //  清明节
 
             //  五一
-            '/5/01', '/5/02', '/5/03', '/5/04',
+            '/5/1', '/5/2', '/5/3', '/5/4',
             //  中秋节
 
             //  国庆节
-            '/10/01', '/10/02', '/10/03', '/10/04', '/10/05', '/10/06', '/10/07',
+            '/10/1', '/10/2', '/10/3', '/10/4', '/10/5', '/10/6', '/10/7',
             //  春节
 
         ];

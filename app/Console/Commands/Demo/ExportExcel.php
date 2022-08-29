@@ -4,6 +4,8 @@ namespace App\Console\Commands\Demo;
 
 use App\Helpers\ArrayHelper;
 use App\Services\TimeBillService;
+use App\Services\TimeListService;
+use App\Services\TimeSummaryService;
 use Illuminate\Console\Command;
 
 class ExportExcel extends Command
@@ -33,12 +35,14 @@ class ExportExcel extends Command
         $start = microtime(true);
 
         try {
-
             //  指定 年份、季度 生成时间记录表
-//            app(TimeBillService::class)->exportTimeBill(2022, 3);
+            app(TimeBillService::class)->exportTimeBill(2022, 4);
+
+//            app(TimeListService::class)->exportTimeList(2022, 4);
+
 
             //  指定 年份 生成时间总结表
-            $data = app(TimeSummaryService::class)->exportTimeSummary(2022);
+//            app(TimeSummaryService::class)->exportTimeSummary(2022);
         } catch (\Exception $e) {
             $logData = ArrayHelper::makeLogData($e, $this->description);
             \Log::error(ArrayHelper::logArrayToString($logData));

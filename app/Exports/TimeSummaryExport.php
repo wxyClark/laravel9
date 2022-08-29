@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Enums\ColorEnum;
+use App\Enums\ColorEnums;
 use App\Helpers\ExcelHelper;
 use App\Services\TimeBillService;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -15,8 +15,21 @@ use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
+/**
+ * @desc TBD
+ * @author wxy
+ * @ctime 2022/8/29 16:42
+ * @package App\Exports
+ */
 class TimeSummaryExport  extends DefaultValueBinder implements FromCollection, WithCustomValueBinder, WithHeadings, WithEvents
 {
+    private $data;
+    private $wakeUpAt = 6;
+    private $sleepAt = 23;
+    private $separator = '——';
+
+    private $maxRowId = 0;
+
     public function __construct($data)
     {
         $this->data = $data;

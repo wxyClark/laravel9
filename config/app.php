@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Facade;
+use \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 
 return [
 
@@ -163,6 +164,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        IdeHelperServiceProvider::class,
 
         /*
          * Package Service Providers...
