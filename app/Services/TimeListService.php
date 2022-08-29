@@ -116,30 +116,9 @@ class TimeListService
      */
     public function getHeader(int $wakeUpAt, int $sleepAt, $separator)
     {
-        $columnsGroup = [
-            //  日汇总
-            $this->getSummaryColumns(),
-
-            //  时间段
-            $this->getTimeIntervalByHalfHour($wakeUpAt, $sleepAt, $separator),
-
-            //  统计
-            $this->getStatisticsColumns(),
-        ];
-
-        $header = $this->getBaseHeader($columnsGroup);
-        $keys = array_keys($header);
-
-        $offset = 0;
-        foreach ($columnsGroup as $columns) {
-            $columnCount = count($columns);
-            $currentKeys = array_slice($keys, $offset, $columnCount);
-            foreach ($currentKeys as $key => $value) {
-                $header[$value] = $columns[$key];
-            }
-
-            $offset += $columnCount;
-        }
+        //  每个季度跨13~14个周
+        $count = 14 * 7 + 3;
+        $header = $this->getBaseHeader($count);
 
         return $header;
     }
@@ -150,16 +129,11 @@ class TimeListService
      * @author  wxy
      * @ctime   2022/6/7 16:47
      */
-    private function getBaseHeader(array $columnsGroup)
+    private function getBaseHeader(array $columnsCount)
     {
-        $count = 0;
-        foreach ($columnsGroup as $columns) {
-            $count += count($columns);
-        }
-
         $start = 'A';
         $baseHeader = [];
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $columnsCount; $i++) {
             if ($i < 26) {
                 //  ASCII转换
                 $key = chr(ord($start) + $i);
