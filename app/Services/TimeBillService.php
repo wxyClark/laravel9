@@ -80,7 +80,7 @@ class TimeBillService
             $currentMonth = date('n', $timestamp);
             $currentYear = date('Y', $timestamp);
         }
-
+dd($data);
         return Excel::store(new TimeBillExport($data), 'excel/'.$year.'H'.$quarter.'-timeBill.xlsx', 'public');
     }
 

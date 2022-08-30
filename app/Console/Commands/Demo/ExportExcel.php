@@ -36,9 +36,7 @@ class ExportExcel extends Command
 
         try {
             //  指定 年份、季度 生成时间记录表
-//            app(TimeBillService::class)->exportTimeBill(2022, 4);
-
-            app(TimeListService::class)->exportTimeList(2022, 4);
+            app(TimeBillService::class)->exportTimeBill(2022, 4);
 
 
             //  指定 年份 生成时间总结表
